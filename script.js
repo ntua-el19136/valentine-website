@@ -375,3 +375,128 @@ window.addEventListener("DOMContentLoaded", () => {
   if (noBtn3) noBtn3.addEventListener("click", () => handleNoClick(noBtn3));
 });
 
+// =========================
+// Yes button: 3 clicks -> show image + message modal (custom)
+// =========================
+let yesClicks = 0;
+
+// Βάλε εδώ το URL της εικόνας που θες για το YES popup
+const YES_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770918393/I5_qfwngg.png";
+
+// Γράψε εδώ το μήνυμα που θες να φαίνεται δίπλα
+const YES_MESSAGE_TEXT = "Better answer this time, but still not what I like to hear. You are a better girl than this, so find the correct answer NOW!";
+
+// Τι θα γράφει το κουμπί
+const YES_CLOSE_BUTTON_TEXT = "Yes sir, I am a good girl and I will do exactly that 🥰​";
+
+function ensureYesModalExists() {
+  let overlay = document.getElementById("yesModalOverlay");
+
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "yesModalOverlay";
+    overlay.style.display = "none";
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(0,0,0,0.35)";
+    overlay.style.zIndex = "99999";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.padding = "16px";
+
+    const wrap = document.createElement("div");
+    wrap.id = "yesModalWrap";
+    wrap.style.display = "flex";
+    wrap.style.gap = "16px";
+    wrap.style.alignItems = "center";
+    wrap.style.maxWidth = "920px";
+    wrap.style.width = "min(920px, 100%)";
+
+    const img = document.createElement("img");
+    img.id = "yesModalImg";
+    img.alt = "yay";
+    img.style.maxWidth = "min(360px, 45vw)";
+    img.style.maxHeight = "70vh";
+    img.style.borderRadius = "18px";
+    img.style.objectFit = "contain";
+    img.style.boxShadow = "0 12px 40px rgba(0,0,0,0.25)";
+    img.style.background = "transparent";
+
+    const card = document.createElement("div");
+    card.id = "yesModalCard";
+    card.style.flex = "1";
+    card.style.padding = "18px 18px 14px";
+    card.style.borderRadius = "18px";
+    card.style.background = "rgba(255,255,255,0.92)";
+    card.style.backdropFilter = "blur(6px)";
+    card.style.boxShadow = "0 12px 40px rgba(0,0,0,0.18)";
+    card.style.display = "flex";
+    card.style.flexDirection = "column";
+    card.style.gap = "12px";
+
+    const msg = document.createElement("div");
+    msg.id = "yesModalMsg";
+    msg.style.fontSize = "18px";
+    msg.style.lineHeight = "1.4";
+    msg.style.color = "#222";
+    msg.style.fontWeight = "600";
+
+    const btn = document.createElement("button");
+    btn.id = "yesModalCloseBtn";
+    btn.type = "button";
+    btn.style.border = "none";
+    btn.style.padding = "12px 14px";
+    btn.style.borderRadius = "14px";
+    btn.style.cursor = "pointer";
+    btn.style.fontSize = "16px";
+    btn.style.fontWeight = "700";
+    btn.style.alignSelf = "flex-start";
+    btn.style.boxShadow = "0 10px 24px rgba(0,0,0,0.12)";
+    btn.style.background = (config?.colors?.buttonBackground) || "#ff6b6b";
+    btn.style.color = "#fff";
+
+    btn.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+
+    card.appendChild(msg);
+    card.appendChild(btn);
+
+    wrap.appendChild(img);
+    wrap.appendChild(card);
+    overlay.appendChild(wrap);
+    document.body.appendChild(overlay);
+  }
+
+  return overlay;
+}
+
+function showYesModal() {
+  const overlay = ensureYesModalExists();
+  const img = document.getElementById("yesModalImg");
+  const msg = document.getElementById("yesModalMsg");
+  const btn = document.getElementById("yesModalCloseBtn");
+
+  img.src = YES_IMAGE_URL;
+  msg.textContent = YES_MESSAGE_TEXT;
+  btn.textContent = YES_CLOSE_BUTTON_TEXT;
+
+  overlay.style.display = "flex";
+}
+
+function handleYesClick() {
+  yesClicks++;
+
+  if (yesClicks === 3) {
+    showYesModal();
+  }
+}
+
+// Συνδέουμε handlers στα Yes buttons (Q1 και Q3)
+window.addEventListener("DOMContentLoaded", () => {
+  const yesBtn1 = document.getElementById("yesBtn1");
+  const yesBtn3 = document.getElementById("yesBtn3");
+
+  if (yesBtn1) yesBtn1.addEventListener("click", handleYesClick);
+  if (yesBtn3) yesBtn3.addEventListener("click", handleYesClick);
+});
