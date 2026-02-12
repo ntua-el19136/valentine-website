@@ -240,3 +240,81 @@ function setupMusicPlayer() {
         }
     });
 } 
+
+// =========================
+// No button: 3 clicks -> show image overlay
+// =========================
+let noClicks = 0;
+
+// Βάλε εδώ το URL της εικόνας που θες να εμφανίζεται (π.χ. Cloudinary link)
+const NO_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770915765/I4_hfuvuz.png";
+
+// Δημιουργεί overlay once και το προσθέτει στο body
+function ensureNoOverlayExists() {
+    let overlay = document.getElementById("noOverlay");
+
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "noOverlay";
+        overlay.style.display = "none";
+        overlay.style.position = "fixed";
+        overlay.style.inset = "0";
+        overlay.style.background = "rgba(0,0,0,0.6)";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "9999";
+        overlay.style.cursor = "pointer";
+
+        const img = document.createElement("img");
+        img.id = "noOverlayImg";
+        img.alt = "no overlay";
+        img.style.maxWidth = "90vw";
+        img.style.maxHeight = "90vh";
+        img.style.borderRadius = "16px";
+        img.style.boxShadow = "0 12px 40px rgba(0,0,0,0.35)";
+
+        overlay.appendChild(img);
+
+        // Κλείσιμο με κλικ οπουδήποτε στο overlay
+        overlay.addEventListener("click", () => {
+            overlay.style.display = "none";
+        });
+
+        document.body.appendChild(overlay);
+    }
+
+    return overlay;
+}
+
+function showNoOverlay() {
+    const overlay = ensureNoOverlayExists();
+    const img = document.getElementById("noOverlayImg");
+    img.src = NO_IMAGE_URL;
+    overlay.style.display = "flex";
+}
+
+function handleNoClick(button) {
+    noClicks++;
+
+    // Κράτα τη δική σου συμπεριφορά που ήδη έχεις (να φεύγει το κουμπί)
+    moveButton(button);
+
+    // Στην 3η φορά συνολικά -> show image
+    if (noClicks === 3) {
+        showNoOverlay();
+    }
+}
+
+// Συνδέουμε handlers όταν φορτώσει το DOM
+window.addEventListener("DOMContentLoaded", () => {
+    const noBtn1 = document.getElementById("noBtn1");
+    const noBtn3 = document.getElementById("noBtn3");
+
+    if (noBtn1) {
+        noBtn1.addEventListener("click", () => handleNoClick(noBtn1));
+    }
+
+    if (noBtn3) {
+        noBtn3.addEventListener("click", () => handleNoClick(noBtn3));
+    }
+});
