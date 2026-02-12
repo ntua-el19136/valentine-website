@@ -251,7 +251,7 @@ let noClicks = 0;
 let yesClicks = 0;
 
 const NO_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770915765/I4_hfuvuz.png";
-const NO_MESSAGE_TEXT = "Change your mind or else I will find you and I will touch you unappropriately ...";
+const NO_MESSAGE_TEXT = "Change your mind or else I will find you and I will touch you inappropriately ...";
 const NO_CLOSE_BUTTON_TEXT = "Yes, sir 🥺​";
 const YES_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770918393/I5_qfwngg.png";
 const YES_MESSAGE_TEXT = "Better answer this time, but still not what I like to hear. You are a better girl than this, so find the correct answer NOW!";
