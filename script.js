@@ -242,79 +242,136 @@ function setupMusicPlayer() {
 } 
 
 // =========================
-// No button: 3 clicks -> show image overlay
+// No button: 3 clicks -> show image + message modal
 // =========================
 let noClicks = 0;
 
-// Βάλε εδώ το URL της εικόνας που θες να εμφανίζεται (π.χ. Cloudinary link)
+// Βάλε εδώ το URL της PNG φωτογραφίας σου
 const NO_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770915765/I4_hfuvuz.png";
 
-// Δημιουργεί overlay once και το προσθέτει στο body
-function ensureNoOverlayExists() {
-    let overlay = document.getElementById("noOverlay");
+// Γράψε εδώ το μήνυμα που θες να φαίνεται δίπλα
+const NO_MESSAGE_TEXT = "Change your mind or else I will find you and I will touch you unappropriately ...";
 
-    if (!overlay) {
-        overlay = document.createElement("div");
-        overlay.id = "noOverlay";
-        overlay.style.display = "none";
-        overlay.style.position = "fixed";
-        overlay.style.inset = "0";
-        overlay.style.background = "rgba(0,0,0,0.6)";
-        overlay.style.alignItems = "center";
-        overlay.style.justifyContent = "center";
-        overlay.style.zIndex = "9999";
-        overlay.style.cursor = "pointer";
+// Τι θα γράφει το κουμπί
+const NO_CLOSE_BUTTON_TEXT = "Yes, sir 🥺​";
 
-        const img = document.createElement("img");
-        img.id = "noOverlayImg";
-        img.alt = "no overlay";
-        img.style.maxWidth = "90vw";
-        img.style.maxHeight = "90vh";
-        img.style.borderRadius = "16px";
-        img.style.boxShadow = "0 12px 40px rgba(0,0,0,0.35)";
+// Δημιουργεί modal once και το προσθέτει στο body
+function ensureNoModalExists() {
+  let overlay = document.getElementById("noModalOverlay");
 
-        overlay.appendChild(img);
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "noModalOverlay";
+    overlay.style.display = "none";
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(0,0,0,0.35)";
+    overlay.style.zIndex = "99999";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.padding = "16px";
 
-        // Κλείσιμο με κλικ οπουδήποτε στο overlay
-        overlay.addEventListener("click", () => {
-            overlay.style.display = "none";
-        });
+    // wrapper
+    const wrap = document.createElement("div");
+    wrap.id = "noModalWrap";
+    wrap.style.display = "flex";
+    wrap.style.gap = "16px";
+    wrap.style.alignItems = "center";
+    wrap.style.maxWidth = "920px";
+    wrap.style.width = "min(920px, 100%)";
 
-        document.body.appendChild(overlay);
-    }
+    // image
+    const img = document.createElement("img");
+    img.id = "noModalImg";
+    img.alt = "surprise";
+    img.style.maxWidth = "min(360px, 45vw)";
+    img.style.maxHeight = "70vh";
+    img.style.borderRadius = "18px";
+    img.style.objectFit = "contain";
+    img.style.boxShadow = "0 12px 40px rgba(0,0,0,0.25)";
+    img.style.background = "transparent";
 
-    return overlay;
+    // message card
+    const card = document.createElement("div");
+    card.id = "noModalCard";
+    card.style.flex = "1";
+    card.style.padding = "18px 18px 14px";
+    card.style.borderRadius = "18px";
+    card.style.background = "rgba(255,255,255,0.92)";
+    card.style.backdropFilter = "blur(6px)";
+    card.style.boxShadow = "0 12px 40px rgba(0,0,0,0.18)";
+    card.style.display = "flex";
+    card.style.flexDirection = "column";
+    card.style.gap = "12px";
+
+    const msg = document.createElement("div");
+    msg.id = "noModalMsg";
+    msg.style.fontSize = "18px";
+    msg.style.lineHeight = "1.4";
+    msg.style.color = "#222";
+    msg.style.fontWeight = "600";
+
+    const btn = document.createElement("button");
+    btn.id = "noModalCloseBtn";
+    btn.type = "button";
+    btn.style.border = "none";
+    btn.style.padding = "12px 14px";
+    btn.style.borderRadius = "14px";
+    btn.style.cursor = "pointer";
+    btn.style.fontSize = "16px";
+    btn.style.fontWeight = "700";
+    btn.style.alignSelf = "flex-start";
+    btn.style.boxShadow = "0 10px 24px rgba(0,0,0,0.12)";
+    btn.style.background = (config?.colors?.buttonBackground) || "#ff6b6b";
+    btn.style.color = "#fff";
+
+    btn.addEventListener("click", () => {
+      // κλείσιμο modal και επιστροφή στην προηγούμενη κατάσταση
+      overlay.style.display = "none";
+    });
+
+    card.appendChild(msg);
+    card.appendChild(btn);
+
+    wrap.appendChild(img);
+    wrap.appendChild(card);
+    overlay.appendChild(wrap);
+    document.body.appendChild(overlay);
+  }
+
+  return overlay;
 }
 
-function showNoOverlay() {
-    const overlay = ensureNoOverlayExists();
-    const img = document.getElementById("noOverlayImg");
-    img.src = NO_IMAGE_URL;
-    overlay.style.display = "flex";
+function showNoModal() {
+  const overlay = ensureNoModalExists();
+  const img = document.getElementById("noModalImg");
+  const msg = document.getElementById("noModalMsg");
+  const btn = document.getElementById("noModalCloseBtn");
+
+  img.src = NO_IMAGE_URL;
+  msg.textContent = NO_MESSAGE_TEXT;
+  btn.textContent = NO_CLOSE_BUTTON_TEXT;
+
+  overlay.style.display = "flex";
 }
 
 function handleNoClick(button) {
-    noClicks++;
+  noClicks++;
 
-    // Κράτα τη δική σου συμπεριφορά που ήδη έχεις (να φεύγει το κουμπί)
-    moveButton(button);
+  // κρατάμε τη δική σου συμπεριφορά: να μετακινείται το κουμπί
+  moveButton(button);
 
-    // Στην 3η φορά συνολικά -> show image
-    if (noClicks === 3) {
-        showNoOverlay();
-    }
+  if (noClicks === 3) {
+    showNoModal();
+  }
 }
 
-// Συνδέουμε handlers όταν φορτώσει το DOM
+// Συνδέουμε handlers στα No buttons (Q1 και Q3)
 window.addEventListener("DOMContentLoaded", () => {
-    const noBtn1 = document.getElementById("noBtn1");
-    const noBtn3 = document.getElementById("noBtn3");
+  const noBtn1 = document.getElementById("noBtn1");
+  const noBtn3 = document.getElementById("noBtn3");
 
-    if (noBtn1) {
-        noBtn1.addEventListener("click", () => handleNoClick(noBtn1));
-    }
-
-    if (noBtn3) {
-        noBtn3.addEventListener("click", () => handleNoClick(noBtn3));
-    }
+  if (noBtn1) noBtn1.addEventListener("click", () => handleNoClick(noBtn1));
+  if (noBtn3) noBtn3.addEventListener("click", () => handleNoClick(noBtn3));
 });
+
