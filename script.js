@@ -245,13 +245,7 @@ function setupMusicPlayer() {
 function showFinalYesScreen() {
   document.querySelectorAll('.question-section').forEach(q => q.classList.add('hidden'));
 
-  // Κρύβουμε και το celebration για να μη φαίνεται διπλό κείμενο
-  document.getElementById("celebration")?.classList.add("hidden");
-
   document.getElementById("finalYesImg").src = FINAL_YES_IMAGE;
-  document.getElementById("finalYesTitle").textContent = config.celebration.title;
-  document.getElementById("finalYesMessage").textContent = config.celebration.message;
-  document.getElementById("finalYesEmojis").textContent = config.celebration.emojis;
 
   document.getElementById("finalYesScreen").classList.remove("hidden");
 }
