@@ -1,5 +1,6 @@
 // Initialize configuration
 const config = window.VALENTINE_CONFIG;
+const FINAL_YES_IMAGE = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1771079441/love_ckskz2.png";
 
 // Validate configuration
 function validateConfig() {
@@ -241,6 +242,18 @@ function setupMusicPlayer() {
     });
 }
 
+function showFinalYesScreen() {
+  document.querySelectorAll('.question-section').forEach(q => q.classList.add('hidden'));
+
+  document.getElementById("finalYesImg").src = FINAL_YES_IMAGE;
+  document.getElementById("finalYesTitle").textContent = config.celebration.title;
+  document.getElementById("finalYesMessage").textContent = config.celebration.message;
+  document.getElementById("finalYesEmojis").textContent = config.celebration.emojis;
+
+  document.getElementById("finalYesScreen").classList.remove("hidden");
+}
+
+
 /* ============================================================
    NO + YES MODALS (3 clicks) with explosion-in and blackhole-out
    (CSS classes/keyframes already in your styles.css)
@@ -250,12 +263,21 @@ function setupMusicPlayer() {
 let noClicks = 0;
 let yesClicks = 0;
 
+//Question 1
 const NO_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770915765/I4_hfuvuz.png";
 const NO_MESSAGE_TEXT = "Change your mind or else I will find you and I will touch you inappropriately ...";
 const NO_CLOSE_BUTTON_TEXT = "Yes, sir 🥺​";
 const YES_IMAGE_URL = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770918393/I5_qfwngg.png";
 const YES_MESSAGE_TEXT = "Better answer this time, but still not what I like to hear. You are a better girl than this, so find the correct answer NOW!";
 const YES_CLOSE_BUTTON_TEXT = "Yes sir, I am a good girl and I will do exactly that 🥰​";
+
+//Question 2
+const NO_IMAGE_URL2 = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770915765/I4_hfuvuz.png";
+const NO_MESSAGE_TEXT2 = "Change your mind or else I will find you and I will touch you inappropriately ...";
+const NO_CLOSE_BUTTON_TEXT2 = "Yes, sir 🥺​";
+const YES_IMAGE_URL2 = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770918393/I5_qfwngg.png";
+const YES_MESSAGE_TEXT2 = "Better answer this time, but still not what I like to hear. You are a better girl than this, so find the correct answer NOW!";
+const YES_CLOSE_BUTTON_TEXT2 = "Yes sir, I am a good girl and I will do exactly that 🥰​";
 
 // Helpers for exit animation (hide after animation ends)
 function hideModalWithBlackHole(overlayId, wrapId) {
@@ -499,11 +521,18 @@ function showYesModal() {
     wrap.classList.add("modalIn");
 }
 
-function handleYesClick() {
-    yesClicks++;
-    if (yesClicks === 3) {
-        showYesModal();
-    }
+function handleYesClick(q) {
+  yesClicks++;
+
+  // Question 1 -> modal όπως πριν
+  if (q === 1 && yesClicks === 3) {
+    showYesModal(YES_IMAGE_Q1, YES_MESSAGE_Q1);
+  }
+
+  // Question 3 -> κατευθείαν νέα οθόνη
+  if (q === 3) {
+    showFinalYesScreen();
+  }
 }
 
 // Hook up button listeners
