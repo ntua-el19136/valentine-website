@@ -375,3 +375,6 @@ h2 {
   transform-origin: center;
 }
 
+#finalYesTitle {
+  display: none !important;
+}
