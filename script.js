@@ -270,12 +270,9 @@ const YES_MESSAGE_TEXT = "Better answer this time, but still not what I like to 
 const YES_CLOSE_BUTTON_TEXT = "Yes sir, I am a good girl and I will do exactly that 🥰​";
 
 //Question 2
-const NO_IMAGE_URL2 = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770915765/I4_hfuvuz.png";
-const NO_MESSAGE_TEXT2 = "Change your mind or else I will find you and I will touch you inappropriately ...";
-const NO_CLOSE_BUTTON_TEXT2 = "Yes, sir 🥺​";
-const YES_IMAGE_URL2 = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1770918393/I5_qfwngg.png";
-const YES_MESSAGE_TEXT2 = "Better answer this time, but still not what I like to hear. You are a better girl than this, so find the correct answer NOW!";
-const YES_CLOSE_BUTTON_TEXT2 = "Yes sir, I am a good girl and I will do exactly that 🥰​";
+const NO_IMAGE_URL_Q3 = "https://res.cloudinary.com/ddwmdbq49/image/upload/v1771079050/bye_ycay0k.png";
+const NO_MESSAGE_TEXT_Q3 = "You are starting to make me think that you really dont want to be my valentine. You have one last chance to change your answer or I will leave and be the saddest person alive!";
+const NO_CLOSE_BUTTON_TEXT_Q3 = "Ooooh, I didn't think it was that serious babe 🥺​";
 
 // Helpers for exit animation (hide after animation ends)
 function hideModalWithBlackHole(overlayId, wrapId) {
@@ -380,37 +377,50 @@ function ensureNoModalExists() {
     return overlay;
 }
 
-function showNoModal() {
+function showNoModal(image, message, buttonText) {
     const overlay = ensureNoModalExists();
     const wrap = document.getElementById("noModalWrap");
     const img = document.getElementById("noModalImg");
     const msg = document.getElementById("noModalMsg");
     const btn = document.getElementById("noModalCloseBtn");
 
-    img.src = NO_IMAGE_URL;
-    msg.textContent = NO_MESSAGE_TEXT;
-    btn.textContent = NO_CLOSE_BUTTON_TEXT;
+    img.src = image;
+    msg.textContent = message;
+    btn.textContent = buttonText;
 
-    // RESET counter όταν εμφανιστεί
     noClicks = 0;
 
     overlay.style.display = "flex";
-
-    // Explosion in
     overlay.classList.remove("modalOverlayOut");
     overlay.classList.add("modalOverlayIn");
     wrap.classList.remove("modalOut");
     wrap.classList.add("modalIn");
 }
 
-function handleNoClick(button) {
+
+function handleNoClick(button, q) {
     noClicks++;
     moveButton(button);
 
     if (noClicks === 3) {
-        showNoModal();
+        if (q === 1) {
+            showNoModal(
+                NO_IMAGE_URL,
+                NO_MESSAGE_TEXT,
+                NO_CLOSE_BUTTON_TEXT
+            );
+        }
+
+        if (q === 3) {
+            showNoModal(
+                NO_IMAGE_URL_Q3,
+                NO_MESSAGE_TEXT_Q3,
+                NO_CLOSE_BUTTON_TEXT_Q3
+            );
+        }
     }
 }
+
 
 /* ---------------- YES MODAL ---------------- */
 function ensureYesModalExists() {
@@ -543,8 +553,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const yesBtn1 = document.getElementById("yesBtn1");
     const yesBtn3 = document.getElementById("yesBtn3");
 
-    if (noBtn1) noBtn1.addEventListener("click", () => handleNoClick(noBtn1));
-    if (noBtn3) noBtn3.addEventListener("click", () => handleNoClick(noBtn3));
+    if (noBtn1) noBtn1.addEventListener("click", () => handleNoClick(noBtn1, 1));
+    if (noBtn3) noBtn3.addEventListener("click", () => handleNoClick(noBtn3, 3));
 
     if (yesBtn1) yesBtn1.addEventListener("click", () => handleYesClick(1));
     if (yesBtn3) yesBtn3.addEventListener("click", () => handleYesClick(3));
