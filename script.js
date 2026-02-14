@@ -498,42 +498,45 @@ function ensureYesModalExists() {
     return overlay;
 }
 
-function showYesModal() {
+function showYesModal(image, message, buttonText) {
     const overlay = ensureYesModalExists();
     const wrap = document.getElementById("yesModalWrap");
     const img = document.getElementById("yesModalImg");
     const msg = document.getElementById("yesModalMsg");
     const btn = document.getElementById("yesModalCloseBtn");
 
-    img.src = YES_IMAGE_URL;
-    msg.textContent = YES_MESSAGE_TEXT;
-    btn.textContent = YES_CLOSE_BUTTON_TEXT;
+    img.src = image;
+    msg.textContent = message;
+    btn.textContent = buttonText;
 
-    // RESET counter όταν εμφανιστεί
     yesClicks = 0;
 
     overlay.style.display = "flex";
-
-    // Explosion in
     overlay.classList.remove("modalOverlayOut");
     overlay.classList.add("modalOverlayIn");
     wrap.classList.remove("modalOut");
     wrap.classList.add("modalIn");
 }
 
+
 function handleYesClick(q) {
-  yesClicks++;
+    yesClicks++;
 
-  // Question 1 -> modal όπως πριν
-  if (q === 1 && yesClicks === 3) {
-    showYesModal(YES_IMAGE_Q1, YES_MESSAGE_Q1);
-  }
+    // Q1 -> modal μετά από 3
+    if (q === 1 && yesClicks === 3) {
+        showYesModal(
+            YES_IMAGE_URL,
+            YES_MESSAGE_TEXT,
+            YES_CLOSE_BUTTON_TEXT
+        );
+    }
 
-  // Question 3 -> κατευθείαν νέα οθόνη
-  if (q === 3) {
-    showFinalYesScreen();
-  }
+    // Q3 -> τελική οθόνη κατευθείαν
+    if (q === 3) {
+        showFinalYesScreen();
+    }
 }
+
 
 // Hook up button listeners
 window.addEventListener("DOMContentLoaded", () => {
@@ -545,6 +548,6 @@ window.addEventListener("DOMContentLoaded", () => {
     if (noBtn1) noBtn1.addEventListener("click", () => handleNoClick(noBtn1));
     if (noBtn3) noBtn3.addEventListener("click", () => handleNoClick(noBtn3));
 
-    if (yesBtn1) yesBtn1.addEventListener("click", handleYesClick);
-    if (yesBtn3) yesBtn3.addEventListener("click", handleYesClick);
+    if (yesBtn1) yesBtn1.addEventListener("click", () => handleYesClick(1));
+    if (yesBtn3) yesBtn3.addEventListener("click", () => handleYesClick(3));
 });
